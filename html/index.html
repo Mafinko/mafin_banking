@@ -1,0 +1,398 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mafin Banking</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="tablet-wrapper" style="display: none;">
+        <div id="tablet-frame">
+            <div id="tablet-screen">
+
+                <!-- APP SCREEN (no login, goes straight in) -->
+                <div id="bank-loading-screen" style="display:none;">
+                    <div class="bank-loading-icon">
+                        <i class="fa-solid fa-building-columns"></i>
+                    </div>
+                    <div class="bank-loading-title">Mafin Banking</div>
+                    <div class="bank-loading-text">Loading account...</div>
+                    <div class="bank-loading-bar">
+                        <span></span>
+                    </div>
+                </div>
+
+                <div id="app-screen" style="display:none;">
+
+                    <!-- Sidebar -->
+                    <nav class="sidebar">
+                        <div class="sidebar-brand">
+                            <i class="fa-solid fa-building-columns"></i>
+                            <span id="ui-sidebar-brand"><span style="color: var(--blue);">Mafin</span> BANKING</span>
+                        </div>
+                        <div class="nav-heading">Categories</div>
+                        <ul class="nav-menu">
+                            <li class="nav-item active" data-page="home">
+                                <i class="fa-solid fa-house-chimney"></i>
+                                <span id="ui-menu-home">Dashboard</span>
+                            </li>
+                            <li class="nav-item" data-page="history">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                                <span id="ui-menu-history">History</span>
+                            </li>
+                            <li class="nav-item" data-page="transfer">
+                                <i class="fa-solid fa-right-left"></i>
+                                <span id="ui-menu-transfer">Transfer</span>
+                            </li>
+                            <li class="nav-item" data-page="settings">
+                                <i class="fa-solid fa-gear"></i>
+                                <span id="ui-menu-settings">Settings</span>
+                            </li>
+                        </ul>
+                        <div class="sidebar-bottom">
+                            <button id="sidebar-close-btn">
+                                <i class="fa-solid fa-xmark"></i>
+                                <span id="ui-menu-close">Close</span>
+                            </button>
+                        </div>
+                    </nav>
+
+                    <!-- Main Content -->
+                    <main class="main-content">
+                        <div class="top-bar">
+                            <div class="section-title">
+                                <i class="fa-solid fa-chart-line"></i>
+                                <span>BANKING</span>
+                            </div>
+                            <div class="top-bar-left">
+                                <div class="search-wrapper">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                    <input type="text" id="bank-search" placeholder="Search transactions...">
+                                </div>
+                                <div class="sort-wrapper">
+                                    <select id="bank-sort">
+                                        <option value="newest">Newest First</option>
+                                        <option value="oldest">Oldest First</option>
+                                        <option value="highest">Amount: High to Low</option>
+                                        <option value="lowest">Amount: Low to High</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button class="top-close-btn" id="close-btn">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- ===== HOME PAGE ===== -->
+                        <section id="page-home" class="page active">
+
+                            <!-- Top row: Balance card left + Bank card right -->
+                            <div class="home-top-row">
+
+                                <!-- Balance Card -->
+                                <div class="balance-card">
+                                    <div class="balance-label" id="ui-home-balance-label">BALANCE</div>
+                                    <div class="balance-value" id="home-balance">$0</div>
+                                    <div class="balance-meta">
+                                        <span><i class="fa-solid fa-circle-check" style="color:#22c55e;"></i> Active account</span>
+                                    </div>
+                                </div>
+
+                                <!-- Credit/Debit Card Visual -->
+                                <div class="bank-card">
+                                    <div class="bank-card-top">
+                                        <div class="bank-card-brand">
+                                            <i class="fa-solid fa-building-columns"></i>
+                                            <span>Mafin Bank</span>
+                                        </div>
+                                        <div class="bank-card-chip">
+                                            <i class="fa-solid fa-microchip"></i>
+                                        </div>
+                                    </div>
+                                    <div class="bank-card-number" id="home-card-number">**** **** **** 0000</div>
+                                    <div class="bank-card-bottom">
+                                        <div>
+                                            <div class="bank-card-meta-label" id="ui-home-card-holder-label">CARD HOLDER</div>
+                                            <div class="bank-card-meta-value" id="home-card-holder">-</div>
+                                        </div>
+                                        <div>
+                                            <div class="bank-card-meta-label" id="ui-home-card-expires-label">VALID THRU</div>
+                                            <div class="bank-card-meta-value" id="home-card-expiry">-</div>
+                                        </div>
+                                        <div class="bank-card-logo">
+                                            <i class="fa-brands fa-cc-visa"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="account-stat-card">
+                                    <span>Account Status</span>
+                                    <strong>Active</strong>
+                                    <small>Mafin Secure</small>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons Row -->
+                            <div class="action-btns-row">
+                                <button class="action-btn" id="btn-open-deposit">
+                                    <div class="action-btn-icon" style="background:rgba(34,197,94,0.12);color:#22c55e;">
+                                        <i class="fa-solid fa-arrow-up"></i>
+                                    </div>
+                                    <span id="ui-btn-deposit">Deposit</span>
+                                </button>
+                                <button class="action-btn" id="btn-open-withdraw">
+                                    <div class="action-btn-icon" style="background:rgba(239,68,68,0.12);color:#ef4444;">
+                                        <i class="fa-solid fa-arrow-down"></i>
+                                    </div>
+                                    <span id="ui-btn-withdraw">Withdraw</span>
+                                </button>
+                                <button class="action-btn" id="btn-open-transfer">
+                                    <div class="action-btn-icon" style="background:rgba(59,130,246,0.12);color:#3b82f6;">
+                                        <i class="fa-solid fa-right-left"></i>
+                                    </div>
+                                    <span id="ui-btn-transfer">Transfer</span>
+                                </button>
+                                <button class="action-btn" id="btn-go-history">
+                                    <div class="action-btn-icon" style="background:rgba(234,179,8,0.12);color:#eab308;">
+                                        <i class="fa-solid fa-list-ul"></i>
+                                    </div>
+                                    <span id="ui-btn-history">History</span>
+                                </button>
+                            </div>
+
+                            <!-- Chart Panel -->
+                            <div class="panel chart-panel" style="margin-top:16px;">
+                                <div class="panel-title" id="ui-home-chart-title">
+                                    <i class="fa-solid fa-chart-area"></i> Balance History
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="balanceChart"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- Recent Transactions Panel -->
+                            <div class="panel" style="margin-top:16px;">
+                                <div class="panel-title" id="ui-home-recent-tx">
+                                    <i class="fa-solid fa-clock-rotate-left"></i> Recent Transactions
+                                </div>
+                                <ul id="recent-transactions" class="recent-tx-list">
+                                    <li class="no-data">Loading...</li>
+                                </ul>
+                            </div>
+
+                        </section>
+
+                        <!-- ===== HISTORY PAGE ===== -->
+                        <section id="page-history" class="page" style="display:none;">
+                            <div class="section-label mt" style="margin-top:0;" id="ui-history-title">TRANSACTION HISTORY</div>
+
+                            <div class="logs-tabs-container">
+                                <button class="log-tab-btn active" data-filter="all" id="ui-history-btn-all">All</button>
+                                <button class="log-tab-btn" data-filter="deposit" id="ui-history-btn-dep">Deposits</button>
+                                <button class="log-tab-btn" data-filter="withdraw" id="ui-history-btn-wit">Withdrawals</button>
+                                <button class="log-tab-btn" data-filter="transfer" id="ui-history-btn-tra">Transfers</button>
+                            </div>
+
+                            <ul id="history-list-view" class="logs-list">
+                                <li class="no-data" style="padding:20px 0;">Loading...</li>
+                            </ul>
+                        </section>
+
+                        <!-- ===== TRANSFER PAGE ===== -->
+                        <section id="page-transfer" class="page" style="display:none;">
+                            <div class="section-label mt" style="margin-top:0;" id="ui-transfer-title">TRANSFER MONEY</div>
+
+                            <div class="finance-cards" style="margin-top:16px;">
+                                <div class="finance-card">
+                                    <div class="finance-card-title">
+                                        <i class="fa-solid fa-right-left" style="color:var(--blue);"></i>
+                                        <span id="ui-transfer-card-title">Transfer to another account</span>
+                                    </div>
+                                    <div class="finance-card-sub" id="ui-transfer-card-desc">Enter the player ID and amount to transfer</div>
+
+                                    <input type="number" id="transfer-target-id" class="finance-input" min="1" placeholder="Player ID...">
+                                    <input type="number" id="transfer-amount" class="finance-input" min="1" placeholder="Amount...">
+
+                                    <div class="quick-amounts">
+                                        <button class="quick-btn" data-target="transfer-amount" data-amount="500">500</button>
+                                        <button class="quick-btn" data-target="transfer-amount" data-amount="1000">1K</button>
+                                        <button class="quick-btn" data-target="transfer-amount" data-amount="5000">5K</button>
+                                        <button class="quick-btn" data-target="transfer-amount" data-amount="10000">10K</button>
+                                    </div>
+
+                                    <button id="btn-transfer" class="btn-primary" style="margin-top:12px;">
+                                        <i class="fa-solid fa-paper-plane"></i>
+                                        <span id="ui-btn-transfer-text">Transfer</span>
+                                    </button>
+                                </div>
+
+                                <!-- Info panel -->
+                                <div class="finance-card" style="justify-content:center; align-items:center; gap:16px;">
+                                    <div class="sbr-icon">
+                                        <i class="fa-solid fa-shield-halved"></i>
+                                    </div>
+                                    <div style="text-align:center;">
+                                        <div class="finance-card-title" style="justify-content:center;">Secure Transfer</div>
+                                        <div class="finance-card-sub" style="margin-bottom:0;">Transfers are instant and cannot be reversed. Check the player ID before sending.</div>
+                                    </div>
+                                    <div class="balance-card" style="width:100%;padding:16px 20px;">
+                                        <div class="balance-label">YOUR BALANCE</div>
+                                        <div class="balance-value" id="transfer-own-balance" style="font-size:24px;">$0</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- ===== SETTINGS PAGE ===== -->
+                        <section id="page-settings" class="page" style="display:none;">
+                            <div class="section-label mt" style="margin-top:0;" id="ui-settings-title">ACCOUNT SETTINGS</div>
+                            <p class="page-desc mb-2" id="ui-settings-desc">You can change your account PIN here. The default PIN is 0000.</p>
+
+                            <div class="finance-cards" style="margin-top:16px;">
+                                <div class="finance-card">
+                                    <div class="finance-card-title">
+                                        <i class="fa-solid fa-lock" style="color:var(--blue);"></i>
+                                        <span>Change PIN code</span>
+                                    </div>
+
+                                    <input type="password" id="settings-old-pin" class="finance-input" maxlength="4" placeholder="Current PIN">
+                                    <input type="password" id="settings-new-pin" class="finance-input" maxlength="4" placeholder="New PIN">
+
+                                    <button id="btn-change-pin" class="btn-primary" style="margin-top:12px;">
+                                        <i class="fa-solid fa-key"></i>
+                                        <span id="ui-settings-btn-change">Change PIN</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
+
+                    </main>
+
+
+                </div> <!-- app-screen end -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MODALS ===== -->
+
+    <!-- Deposit Modal -->
+    <div id="modal-deposit" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-title" id="ui-modal-deposit-title">Deposit Money</div>
+            <div class="modal-desc" id="ui-modal-deposit-desc">Enter the amount you want to deposit to your account</div>
+            <input type="number" id="deposit-amount" class="modal-input" min="1" placeholder="Amount ($)">
+            <div class="quick-amounts" style="margin-bottom:20px;">
+                <button class="quick-btn" data-target="deposit-amount" data-amount="500">500</button>
+                <button class="quick-btn" data-target="deposit-amount" data-amount="1000">1K</button>
+                <button class="quick-btn" data-target="deposit-amount" data-amount="5000">5K</button>
+                <button class="quick-btn" data-target="deposit-amount" data-amount="10000">10K</button>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-cancel" id="btn-cancel-deposit">Cancel</button>
+                <button class="btn-confirm" id="btn-confirm-deposit">Deposit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div id="modal-withdraw" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-title" id="ui-modal-withdraw-title">Withdraw Money</div>
+            <div class="modal-desc" id="ui-modal-withdraw-desc">Enter the amount you want to withdraw from your account</div>
+            <input type="number" id="withdraw-amount" class="modal-input" min="1" placeholder="Amount ($)">
+            <div class="quick-amounts" style="margin-bottom:20px;">
+                <button class="quick-btn" data-target="withdraw-amount" data-amount="500">500</button>
+                <button class="quick-btn" data-target="withdraw-amount" data-amount="1000">1K</button>
+                <button class="quick-btn" data-target="withdraw-amount" data-amount="5000">5K</button>
+                <button class="quick-btn" data-target="withdraw-amount" data-amount="10000">10K</button>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-cancel" id="btn-cancel-withdraw">Cancel</button>
+                <button class="btn-confirm" id="btn-confirm-withdraw">Withdraw</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ATM WRAPPER ===== -->
+    <div id="atm-wrapper" style="display: none;">
+        <div class="atm-container">
+
+            <!-- ATM PIN SCREEN -->
+            <div id="atm-pin-screen" style="display:flex;">
+                <div class="atm-title" id="ui-atm-pin-title">Enter PIN</div>
+                <div class="atm-pin-display">
+                    <div class="pin-dot" id="pin-dot-1"></div>
+                    <div class="pin-dot" id="pin-dot-2"></div>
+                    <div class="pin-dot" id="pin-dot-3"></div>
+                    <div class="pin-dot" id="pin-dot-4"></div>
+                </div>
+                <div class="atm-numpad">
+                    <button class="atm-key" data-key="1">1</button>
+                    <button class="atm-key" data-key="2">2</button>
+                    <button class="atm-key" data-key="3">3</button>
+                    <button class="atm-key" data-key="4">4</button>
+                    <button class="atm-key" data-key="5">5</button>
+                    <button class="atm-key" data-key="6">6</button>
+                    <button class="atm-key" data-key="7">7</button>
+                    <button class="atm-key" data-key="8">8</button>
+                    <button class="atm-key" data-key="9">9</button>
+                    <button class="atm-key btn-red" data-key="C">C</button>
+                    <button class="atm-key" data-key="0">0</button>
+                    <button class="atm-key btn-green" data-key="E"><i class="fa-solid fa-check"></i></button>
+                </div>
+                <button class="atm-exit-btn" id="btn-atm-exit-pin">Cancel & Leave</button>
+            </div>
+
+            <!-- ATM DASHBOARD -->
+            <div id="atm-main-screen" style="display:none; width: 100%; position: relative;">
+                
+                <!-- ATM LOADING OVERLAY -->
+                <div id="atm-loading-screen" style="display:none; position: absolute; inset: 0; background: var(--bg); z-index: 10; flex-direction: column; align-items: center; justify-content: center; border-radius: var(--radius-lg);">
+                    <div class="atm-loading-spinner"></div>
+                    <div class="atm-loading-text" id="ui-atm-verifying">Verifying...</div>
+                </div>
+
+                <div class="atm-title" id="ui-atm-title">Account Overview</div>
+                <div class="atm-balance-box">
+                    <div class="atm-balance-label" id="ui-atm-balance-label">YOUR BALANCE</div>
+                    <div class="atm-balance-value" id="atm-balance">$0</div>
+                    <div style="color: var(--white-4); font-size: 13px; margin-top: 8px;"><span id="ui-atm-account-number">Account Number:</span> <span id="atm-account" style="color: var(--white-2); font-weight: 600;">0000000</span></div>
+                </div>
+
+                <div class="atm-actions" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <button class="atm-action-btn" id="btn-atm-withdraw" style="padding: 14px;"><i class="fa-solid fa-arrow-down"></i> Withdraw</button>
+                    <button class="atm-action-btn" id="btn-atm-deposit" style="padding: 14px;"><i class="fa-solid fa-arrow-up"></i> Deposit</button>
+                </div>
+
+                <div style="margin-top: 24px;">
+                    <div class="atm-section-title" id="ui-atm-quick-withdraw" style="font-size: 13px; font-weight: 600; color: var(--white-4); text-transform: uppercase; margin-bottom: 12px; text-align: left;">Quick Withdrawal</div>
+                    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;">
+                        <button class="quick-btn atm-quick" data-amount="500">500</button>
+                        <button class="quick-btn atm-quick" data-amount="1000">1K</button>
+                        <button class="quick-btn atm-quick" data-amount="2500">2.5K</button>
+                        <button class="quick-btn atm-quick" data-amount="5000">5K</button>
+                        <button class="quick-btn atm-quick" data-amount="10000">10K</button>
+                    </div>
+                </div>
+
+                <div style="margin-top: 24px; flex: 1;">
+                    <div class="atm-section-title" id="ui-atm-recent-tx" style="font-size: 13px; font-weight: 600; color: var(--white-4); text-transform: uppercase; margin-bottom: 12px; text-align: left;">Recent Transactions</div>
+                    <ul id="atm-recent-tx" class="recent-tx-list">
+                        <!-- Injected via JS -->
+                    </ul>
+                </div>
+
+                <button class="atm-exit-btn" id="btn-atm-exit-main" style="margin-top: 24px;">Cancel & Leave</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>
